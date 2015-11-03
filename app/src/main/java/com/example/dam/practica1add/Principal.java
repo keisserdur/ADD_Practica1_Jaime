@@ -2,9 +2,12 @@ package com.example.dam.practica1add;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Parcelable;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -22,19 +25,23 @@ import org.xmlpull.v1.XmlPullParserException;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 public class Principal extends AppCompatActivity {
 
-    private final int CONFIG = 1,INSERTAR=2,EDITAR=3;
-    private boolean absoluta=true,sinc=false;
+    private final int CONFIG = 1,INSERTAR=2,EDITAR=2;
     private TextView tv;
     private List<Persona> lista,lista2;
     private GestorXML gestor;
     private ListView lv;
     private AdapterClass adt;
     private int num=0;
+    private SharedPreferences.Editor ed;
+    private SharedPreferences pc;
+    private Date fecha;
 
 
     @Override
@@ -45,6 +52,8 @@ public class Principal extends AppCompatActivity {
         try {
             ini();
         } catch (IOException e) {
+            e.printStackTrace();
+        } catch (XmlPullParserException e) {
             e.printStackTrace();
         }
     }
@@ -125,7 +134,8 @@ public class Principal extends AppCompatActivity {
 
     /********************************************************************************************/
 
-    public void ini() throws IOException {
+    public void ini() throws IOException, XmlPullParserException {
+        fecha=new Date();
         lv = (ListView) findViewById(R.id.lv);
         lista2=new ArrayList<Persona>();
 
@@ -134,11 +144,30 @@ public class Principal extends AppCompatActivity {
 
         gestor=new GestorXML(this);
 
-        if(sinc){
-            gestor.sincronizar(lista,"total.xml");
+        pc = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        ed = pc.edit();
+
+
+        //Saca los datos la primera vez
+        if(pc.getBoolean("first",true)) {
+            obtenerDatos();
+
+            gestor.sincronizar(lista, "total.xml");
+
+            ed.putString("fecha","("+fecha.getHours()+":"+fecha.getMinutes()+")"+fecha.getDay()+"/"+fecha.getMonth()+"/"+fecha.getYear()+1900);
+            ed.putBoolean("first",false);
+            ed.commit();
+        }else{
+            lista=gestor.recuperar("total.xml");
         }
 
-        obtenerDatos();
+        //Autosincroniza
+        if(pc.getBoolean("sinc",false)){
+            gestor.sincronizar(lista, "total.xml");
+            ed.putString("fecha","("+fecha.getHours()+":"+fecha.getMinutes()+")"+fecha.getDay()+"/"+fecha.getMonth()+"/"+fecha.getYear()+1900);
+            ed.commit();
+        }
+
 
         //Creamos un adaptador y se lo asignamos al ListView
         adt = new AdapterClass(this, R.layout.elemento_lista, lista);
@@ -158,10 +187,14 @@ public class Principal extends AppCompatActivity {
 
     public void sincronizar(View v) throws IOException, XmlPullParserException {
 
-        if(absoluta){
+        Log.v("SAP",lista.isEmpty()+"");
+        if(pc.getBoolean("forma",true) && !lista.isEmpty()){
             gestor.sincronizar(lista,"archivo.xml");
             lista2.clear();
             num=0;
+
+            ed.putString("fecha", "(" + fecha.getHours() + ":" + fecha.getMinutes() + ")" + fecha.getDay() + "/" + fecha.getMonth() + "/" + fecha.getYear()+1900);
+            ed.commit();
         }else{
             if(lista2!=null) {
                 gestor.sincronizar(lista2,"parcial"+num+".xml");
@@ -189,11 +222,6 @@ public class Principal extends AppCompatActivity {
 
     @Override
     public void onActivityResult(int requestCode,int resultCode, Intent data){
-        if (resultCode == Activity.RESULT_OK && requestCode == CONFIG) {
-            Bundle b=data.getExtras();
-            absoluta=b.getBoolean("absoluta");
-            sinc=b.getBoolean("sinc");
-        }
         if(resultCode == Activity.RESULT_OK && requestCode == INSERTAR){
             Bundle b=data.getExtras();
             Persona p=b.getParcelable("persona");

@@ -1,6 +1,7 @@
 package com.example.dam.practica1add.archivoXML;
 
 import android.content.Context;
+import android.util.Log;
 import android.util.Xml;
 import com.example.dam.practica1add.datos.Persona;
 import org.xmlpull.v1.XmlPullParser;
@@ -51,14 +52,14 @@ public class GestorXML {
         fosxml.close();
     }
 
-    public List<Persona> sincronizar() throws IOException, XmlPullParserException {
+    public List<Persona> recuperar(String nombre) throws IOException, XmlPullParserException {
 
         List<Persona> r=new ArrayList<Persona>();
         List<String> telf=new ArrayList<String>();
         StringBuilder aux=new StringBuilder();
 
         XmlPullParser lectorxml = Xml.newPullParser();
-        lectorxml.setInput(new FileInputStream(new File(c.getExternalFilesDir(null), "total.xml")), "utf-8");
+        lectorxml.setInput(new FileInputStream(new File(c.getExternalFilesDir(null), nombre)), "utf-8");
         int evento = lectorxml.getEventType();
         while (evento != XmlPullParser.END_DOCUMENT){
             if(evento == XmlPullParser.START_TAG){
@@ -70,7 +71,8 @@ public class GestorXML {
                     String texto = lectorxml.nextText();
 
                     p.setNombre(texto);
-                    p.setId(Long.parseLong(atrib));
+                    Long id=Long.parseLong(atrib.substring(1,atrib.length()-1));
+                    p.setId(id);
 
                     telf=new ArrayList<String>();
 

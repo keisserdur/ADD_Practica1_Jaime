@@ -78,6 +78,8 @@ public class Persona implements Serializable,Comparable<Persona>, Parcelable {
     }
 
     public String getPrimerTelefono() {
+        if(this.getTelf().size()<1)
+            return "";
         return telf.get(0);
     }
 

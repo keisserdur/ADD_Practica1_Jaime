@@ -2,7 +2,9 @@ package com.example.dam.practica1add;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.RadioGroup;
@@ -13,8 +15,9 @@ import android.widget.RadioGroup;
 public class Config extends Activity {
 
     //private CheckBox sinc;
-    private boolean sinc=false,forma;
     private RadioGroup rg;
+    private SharedPreferences.Editor ed;
+    private SharedPreferences pc;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -22,28 +25,30 @@ public class Config extends Activity {
 
        // sinc= (CheckBox) findViewById(R.id.checkBox);
         rg= (RadioGroup) findViewById(R.id.formasinc);
+        pc = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        ed = pc.edit();
 
 
     }
 
     public void sinc(View V){
-        sinc=!sinc;
+        Boolean aux=pc.getBoolean("sinc",false);
+        if(!aux)
+
+            ed.putBoolean("sinc", true);
+        else
+            ed.putBoolean("sinc", false);
+
     }
 
     public void aceptar(View v){
         if(R.id.radioAbsoluta==rg.getCheckedRadioButtonId()){
-            forma=true;
+            ed.putBoolean("forma", true);
         }else{
-            forma=false;
+            ed.putBoolean("forma", false);
         }
+        ed.commit();
 
-        Intent i = new Intent();
-        Bundle bundle = new Bundle();
-        bundle.putBoolean("sinc",sinc);
-        bundle.putBoolean("absoluta",forma);
-
-        i.putExtras(bundle);
-        setResult(Activity.RESULT_OK, i);
         finish();
     }
 }
