@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".Insert">
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/et_nombre"
+
+        android:hint="@string/str_nombre"
+        android:gravity="center" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/et_telefono"
+        android:layout_below="@+id/et_nombre"
+        android:hint="@string/str_telefono"
+        android:gravity="center"
+        android:inputType="number" />
+
+
+
+    <Button
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/str_agregar"
+        android:id="@+id/bt_aceptar"
+
+        android:onClick="agregar" />
+
+    <Button
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/str_cancelar"
+        android:id="@+id/bt_cancelar"
+
+        android:onClick="cancelar" />
+
+</LinearLayout>

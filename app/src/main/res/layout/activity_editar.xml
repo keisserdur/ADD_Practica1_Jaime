@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+
+    <EditText
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/et_nombre"
+        android:hint="@string/str_nombre"
+        android:gravity="center"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/str_primertelf"
+        android:gravity="center"
+        android:id="@+id/et_telf1"
+        android:inputType="number" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/str_segundotelf"
+        android:gravity="center"
+        android:id="@+id/et_telf12"
+        android:inputType="number" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/str_tercerotelf"
+        android:gravity="center"
+        android:id="@+id/et_telf13"
+        android:inputType="number" />
+    <Button
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/str_editar"
+        android:id="@+id/bt_aceptar"
+        android:onClick="Editar" />
+
+    <Button
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/str_cancelar"
+        android:id="@+id/bt_cancelar"
+        android:onClick="cancelar" />
+</LinearLayout>

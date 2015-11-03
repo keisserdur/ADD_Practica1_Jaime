@@ -1,0 +1,23 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".Principal">
+
+    <item
+        android:id="@+id/ordenarAZ"
+        android:title="@string/str_ordenar_az">
+
+    </item>
+    <item
+        android:id="@+id/ordenarZA"
+        android:title="@string/str_ordenar_za">
+
+    </item>
+
+    <item
+        android:id="@+id/menu_insertar"
+        android:title="@string/str_insertar">
+
+    </item>
+
+</menu>
